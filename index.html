@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistem Absensi FOKSI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles for login page */
+        .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .logo-large {
+            font-size: 3.5rem;
+            color: #d32f2f;
+            margin-bottom: 20px;
+        }
+        
+        .login-title {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .demo-account {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .demo-account h4 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .demo-account p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #d32f2f;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo-large">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                
+                <h1 class="login-title">SISTEM ABSENSI FOKSI</h1>
+                <p class="login-subtitle">Login untuk mengakses sistem</p>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" placeholder="nama@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="Masukkan password" required>
+                            <button type="button" class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userType">Login Sebagai</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-tag"></i>
+                            <select id="userType" required>
+                                <option value="">Pilih jenis pengguna</option>
+                                <option value="anggota">Anggota</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Memproses login...</p>
+                    </div>
+                </form>
+                
+                <div class="links">
+                    <p>
+                        <a href="#" id="forgotPasswordLink">Lupa password?</a>
+                        <span style="margin: 0 10px">•</span>
+                        <a href="#" id="registerAdminLink">Daftar sebagai Admin</a>
+                    </p>
+                </div>
+                
+                <div class="demo-account">
+                    <h4>Akun Demo (Saat Pertama Kali):</h4>
+                    <p><strong>Admin:</strong> admin@foksi.com / password123</p>
+                    <p><strong>Anggota:</strong> anggota@foksi.com / password123</p>
+                    <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">
+                        *Email bisa diganti sesuai kebutuhan
+                    </p>
+                </div>
+                
+                <div class="version">
+                    <p>v1.0.0 • Sistem Absensi FOKSI</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Forgot Password -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Reset Password</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Masukkan email Anda untuk menerima link reset password:</p>
+                <div class="form-group">
+                    <input type="email" id="resetEmail" placeholder="email@domain.com" class="full-width">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="sendResetBtn">Kirim Link Reset</button>
+                    <button class="btn btn-secondary close-modal">Batal</button>
+                </div>
+                <div id="resetMessage" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Register Admin -->
+    <div class="modal" id="registerAdminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Daftar Admin Baru</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registerAdminForm">
+                    <div class="form-group">
+                        <label for="adminName">Nama Lengkap</label>
+                        <input type="text" id="adminName" placeholder="Nama admin" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminEmail">Email</label>
+                        <input type="email" id="adminEmail" placeholder="admin@foksi.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminPassword">Password</label>
+                        <input type="password" id="adminPassword" placeholder="Minimal 6 karakter" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Konfirmasi Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Ulangi password" required>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">Daftar</button>
+                        <button type="button" class="btn btn-secondary close-modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Firebase Configuration -->
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            sendPasswordResetEmail,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc,
+            Timestamp 
+        } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd0sX2V0c5PJDyYIzHfKe3kDG5PF555Eo",
+            authDomain: "web-foksi.firebaseapp.com",
+            projectId: "web-foksi",
+            storageBucket: "web-foksi.firebasestorage.app",
+            messagingSenderId: "292184437429",
+            appId: "1:292184437429:web:2883877cbc61993b9a44fc",
+            measurementId: "G-49XD722EFY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Export to window for other scripts
+        window.firebaseApp = app;
+        window.auth = auth;
+        window.db = db;
+        window.Timestamp = Timestamp;
+
+        console.log("Firebase initialized successfully");
+    </script>
+
+    <!-- Main Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+
+            // Modal functionality
+            const modals = document.querySelectorAll('.modal');
+            const closeButtons = document.querySelectorAll('.close-modal');
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            const registerAdminLink = document.getElementById('registerAdminLink');
+            const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+            const registerAdminModal = document.getElementById('registerAdminModal');
+
+            // Open modals
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                forgotPasswordModal.style.display = 'block';
+            });
+
+            registerAdminLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                registerAdminModal.style.display = 'block';
+            });
+
+            // Close modals
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    modals.forEach(modal => modal.style.display = 'none');
+                });
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+
+            // Forgot password functionality
+            const sendResetBtn = document.getElementById('sendResetBtn');
+            const resetMessage = document.getElementById('resetMessage');
+
+            sendResetBtn.addEventListener('click', async function() {
+                const email = document.getElementById('resetEmail').value;
+                
+                if (!email) {
+                    resetMessage.innerHTML = '<div class="alert error">Email harus diisi</div>';
+                    return;
+                }
+
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    resetMessage.innerHTML = '<div class="alert success">Link reset password telah dikirim ke email Anda</div>';
+                    setTimeout(() => {
+                        forgotPasswordModal.style.display = 'none';
+                        resetMessage.innerHTML = '';
+                    }, 3000);
+                } catch (error) {
+                    console.error('Reset password error:', error);
+                    resetMessage.innerHTML = `<div class="alert error">${getErrorMessage(error.code)}</div>`;
+                }
+            });
+
+            // Register admin form
+            const registerAdminForm = document.getElementById('registerAdminForm');
+            
+            registerAdminForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('adminName').value;
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    alert('Password tidak cocok!');
+                    return;
+                }
+                
+                try {
+                    // Create user in Firebase Auth
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    // Save user data to Firestore
+                    await setDoc(doc(db, "users", user.uid), {
+                        nama: name,
+                        email: email,
+                        role: "admin",
+                        jabatan: "Admin",
+                        regional: "Nasional",
+                        sekolah: "FOKSI Pusat",
+                        createdAt: Timestamp.now(),
+                        emailVerified: false
+                    });
+                    
+                    alert('Admin berhasil didaftarkan! Silakan login dengan akun baru.');
+                    registerAdminModal.style.display = 'none';
+                    registerAdminForm.reset();
+                    
+                } catch (error) {
+                    console.error('Register admin error:', error);
+                    alert(getErrorMessage(error.code));
+                }
+            });
+
+            // Login form
+            const loginForm = document.getElementById('loginForm');
+            const loading = document.getElementById('loading');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const userType = document.getElementById('userType').value;
+                
+                if (!userType) {
+                    alert('Pilih jenis pengguna terlebih dahulu!');
+                    return;
+                }
+                
+                // Show loading
+                loginBtn.disabled = true;
+                loading.classList.add('active');
+                
+                try {
+                    // Sign in with Firebase Auth
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    // Get user data from Firestore
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    
+                    if (!userDoc.exists()) {
+                        throw new Error('Data pengguna tidak ditemukan');
+                    }
+                    
+                    const userData = userDoc.data();
+                    
+                    // Check if user type matches
+                    if (userData.role !== userType) {
+                        throw new Error(`Anda login sebagai ${userData.role}, bukan ${userType}`);
+                    }
+                    
+                    // Store user data in sessionStorage
+                    sessionStorage.setItem('currentUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        ...userData
+                    }));
+                    
+                    // Redirect based on role
+                    if (userData.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'anggota.html';
+                    }
+                    
+                } catch (error) {
+                    console.error('Login error:', error);
+                    alert(getErrorMessage(error.code) || error.message);
+                    
+                    // Reset form
+                    loginBtn.disabled = false;
+                    loading.classList.remove('active');
+                }
+            });
+
+            // Check if user is already logged in
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    try {
+                        const userDoc = await getDoc(doc(db, "users", user.uid));
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            
+                            // Store user data
+                            sessionStorage.setItem('currentUser', JSON.stringify({
+                                uid: user.uid,
+                                email: user.email,
+                                ...userData
+                            }));
+                            
+                            // Redirect based on role
+                            if (userData.role === 'admin') {
+                                window.location.href = 'admin.html';
+                            } else {
+                                window.location.href = 'anggota.html';
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Auth state check error:', error);
+                    }
+                }
+            });
+
+            // Helper function for error messages
+            function getErrorMessage(errorCode) {
+                const errorMessages = {
+                    'auth/invalid-email': 'Email tidak valid',
+                    'auth/user-disabled': 'Akun dinonaktifkan',
+                    'auth/user-not-found': 'Pengguna tidak ditemukan',
+                    'auth/wrong-password': 'Password salah',
+                    'auth/email-already-in-use': 'Email sudah digunakan',
+                    'auth/weak-password': 'Password terlalu lemah',
+                    'auth/network-request-failed': 'Koneksi jaringan bermasalah',
+                    'auth/too-many-requests': 'Terlalu banyak percobaan, coba lagi nanti'
+                };
+                
+                return errorMessages[errorCode] || 'Terjadi kesalahan. Silakan coba lagi.';
+            }
+        });
+    </script>
+</body>
+</html>
