@@ -6,13 +6,13 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCd0sX2V0c5PJDyYIzHfKe3kDG5PF555Eo",
-    authDomain: "web-foksi.firebaseapp.com",
-    projectId: "web-foksi",
-    storageBucket: "web-foksi.firebasestorage.app",
-    messagingSenderId: "292184437429",
-    appId: "1:292184437429:web:2883877cbc61993b9a44fc",
-    measurementId: "G-49XD722EFY"
+    apiKey: "AIzaSyBaEkKJzyohsq6GK5GWygai0q3V0O_MkLY",
+    authDomain: "web-foksi-9acb9.firebaseapp.com",
+    projectId: "web-foksi-9acb9",
+    storageBucket: "web-foksi-9acb9.firebasestorage.app",
+    messagingSenderId: "811305636316",
+    appId: "1:811305636316:web:d3c5b72980180dcc203f19",
+    measurementId: "G-18FYWPGBJP"
 };
 
 // Initialize Firebase
